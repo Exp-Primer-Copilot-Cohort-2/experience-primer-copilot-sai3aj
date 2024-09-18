@@ -1,41 +1,22 @@
-// Create a web server
-const express = require('express');
-const bodyParser = require('body-parser');
-const fs = require('fs');
-const app = express();
-const port = 3000;
+// Create web server
+// Create a new web server using the express module.
+// Define a route for GET requests to the path /comments.
+// The route should read the contents of the file comments.json and return the contents to the client using res.send.
+// Finally, listen on port 3000.
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+// Import the express module
+var express = require('express');
 
-app.get('/comments', (req, res) => {
-  fs.readFile('comments.json', (err, data) => {
-    if (err) {
-      res.status(500).send('Internal Server Error');
-    } else {
-      res.send(JSON.parse(data));
-    }
-  });
+// Create a new web server
+var app = express();
+
+// Define a route for GET requests to /comments
+app.get('/comments', function(req, res) {
+    // Read the contents of the file comments.json
+    var comments = require('fs').readFileSync('comments.json');
+    // Return the contents to the client
+    res.send(comments);
 });
 
-app.post('/comments', (req, res) => {
-  fs.readFile('comments.json', (err, data) => {
-    if (err) {
-      res.status(500).send('Internal Server Error');
-    } else {
-      const comments = JSON.parse(data);
-      comments.push(req.body);
-      fs.writeFile('comments.json', JSON.stringify(comments), (err) => {
-        if (err) {
-          res.status(500).send('Internal Server Error');
-        } else {
-          res.status(201).send('Created');
-        }
-      });
-    }
-  });
-});
-
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+// Listen on port 3000
+app.listen(3000);
